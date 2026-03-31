@@ -438,81 +438,9 @@ CWS.Mill.prototype._create3DWorkpiece = function ()
             }
         }
     
-         var index = geometry.index;
-         var attributes = geometry.attributes;
-         var groups = geometry.groups;
-
-         var positions = attributes.position.array;
-         var array = attributes.normal.array;
-
-         for ( var i = 0, il = array.length; i < il; i ++ ) 
-         {
-             array[i] = 0;
-         }
-
-         var normals = attributes.normal.array;
-         var vA, vB, vC,
-
-         pA = new THREE.Vector3(),
-         pB = new THREE.Vector3(),
-         pC = new THREE.Vector3(),
-
-         cb = new THREE.Vector3(),
-         ab = new THREE.Vector3();
-
-         var indices = index.array;
-         if ( groups.length === 0 ) 
-         {
-             geometry.addGroup( 0, indices.length );
-         }
-         for ( var j = 0, jl = groups.length; j < jl; ++ j ) 
-         {
-             var group = groups[ j ];
-             var start = group.start;
-             var count = group.count;
-
-             for ( var i = start, il = start + count; i < il; i += 3 ) 
-             {
-                 vA = indices[ i + 0 ] * 3;
-                 vB = indices[ i + 1 ] * 3;
-                 vC = indices[ i + 2 ] * 3;
-
-                 pA.fromArray( positions, vA );
-                 pB.fromArray( positions, vB );
-                 pC.fromArray( positions, vC );
-
-                 cb.subVectors( pC, pB );
-                 ab.subVectors( pA, pB );
-                 cb.cross( ab );
-
-                 normals[ vA ] += cb.x;
-                 normals[ vA + 1 ] += cb.y;
-                 normals[ vA + 2 ] += cb.z;
-
-                 normals[ vB ] += cb.x;
-                 normals[ vB + 1 ] += cb.y;
-                 normals[ vB + 2 ] += cb.z;
-
-                 normals[ vC ] += cb.x;
-                 normals[ vC + 1 ] += cb.y;
-                 normals[ vC + 2 ] += cb.z;
-             }
-         }
-
-         var x, y, z, n;
-         for ( var i = 0, il = normals.length; i < il; i += 3 ) 
-         {
-             x = normals[ i ];
-             y = normals[ i + 1 ];
-             z = normals[ i + 2 ];
-             n = 1.0 / Math.sqrt( x * x + y * y + z * z );
-             normals[ i ] *= n;
-             normals[ i + 1 ] *= n;
-             normals[ i + 2 ] *= n;
-         }
-
-        attributes.position.needsUpdate = true;
-        attributes.normal.needsUpdate = true;
+        geometry.computeVertexNormals();
+        geometry.attributes.position.needsUpdate = true;
+        geometry.attributes.normal.needsUpdate = true;
         
         this.mesh3D.position.x = -this.workpiece.x/2;
         this.mesh3D.position.y = -this.workpiece.y/2;
