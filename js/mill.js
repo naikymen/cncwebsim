@@ -374,7 +374,7 @@ CWS.Mill.prototype._create3DWorkpiece = function ()
 		this.gl.useProgram(this.shaderProgram1);
         this.gl.bindTexture(this.gl.TEXTURE_2D, null);
         this.linesVertexPositionBuffer = this.createBuffer(  this.linesVertexPositionBuffer,this.motionData.positions,3,
-                                                        this.shaderProgram2.vertexPositionAttribute);
+                                                        this.shaderProgram1.vertexPositionAttribute);
         this.gl.uniform3f(this.shaderProgram1.dimensions, this.renderDimensions.x,this.renderDimensions.y,this.renderDimensions.z);
         this.gl.uniform1f(this.shaderProgram1.resolution, this.renderResolution);
         this.gl.uniform1f(this.shaderProgram1.toolRadius, this.tool.radius);
